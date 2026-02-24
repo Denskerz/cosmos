@@ -1,0 +1,92 @@
+:root {
+    --cyan: #00f2ff;
+    --deep-blue: #0a0a1a;
+    --glass: rgba(0, 242, 255, 0.05);
+    --neon-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+}
+
+body {
+    margin: 0;
+    background: var(--deep-blue);
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* Интерфейс управления */
+.hud-container {
+    position: relative;
+    z-index: 10;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 250px 1fr 300px;
+    padding: 20px;
+    gap: 20px;
+    pointer-events: none;
+}
+
+.panel {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--cyan);
+    border-radius: 15px;
+    padding: 20px;
+    pointer-events: auto;
+    box-shadow: var(--neon-shadow);
+    transition: 0.3s;
+}
+
+.panel:hover {
+    box-shadow: 0 0 25px var(--cyan);
+}
+
+h2 {
+    color: var(--cyan);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: 0;
+}
+
+/* Стили кнопок */
+.btn {
+    display: block;
+    width: 100%;
+    background: var(--glass);
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: var(--cyan);
+    color: black;
+}
+
+/* Анимация сканера */
+.scan-line {
+    position: fixed;
+    width: 100%;
+    height: 2px;
+    background: var(--cyan);
+    opacity: 0.1;
+    z-index: 5;
+    animation: scan 8s linear infinite;
+}
+
+@keyframes scan {
+    from { top: 0; }
+    to { top: 100%; }
+}
