@@ -1,45 +1,152 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <title>Deep Space Command</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Nexus | Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts: Inter -->
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e5e7eb; }
+    </style>
 </head>
-<body>
-    <div class="scan-line"></div>
-    <canvas id="space"></canvas>
+<body class="antialiased overflow-x-hidden selection:bg-indigo-500/30">
 
-    <div class="hud-container">
-        <!-- Левая панель: Статус -->
-        <div class="panel">
-            <h2>System Status</h2>
-            <p>Reactor: <span style="color: #0f0;">ONLINE</span></p>
-            <p>Shields: 84%</p>
-            <p>Warp Speed: <span id="speed-display">2</span></p>
-            <div style="height: 10px; background: #222; border-radius: 5px; overflow: hidden;">
-                <div style="width: 84%; height: 100%; background: #00f2ff;"></div>
-            </div>
-        </div>
-
-        <!-- Центр: Пусто для обзора -->
-        <div></div>
-
-        <!-- Правая панель: Команды -->
-        <div class="panel">
-            <h2>Command Module</h2>
-            <button class="btn" onclick="setSpeed(1)">Cruising Speed</button>
-            <button class="btn" onclick="setSpeed(10)">Full Warp</button>
-            <button class="btn" onclick="emergencyJump()" style="border-color: #f00; color: #f00;">Emergency Jump</button>
-            
-            <h2 style="margin-top: 30px;">Sensors</h2>
-            <ul style="font-size: 0.8rem; padding-left: 15px; color: #888;">
-                <li>No threats detected</li>
-                <li>Nebula X-42 nearby</li>
-                <li>Signal lost...</li>
-            </ul>
-        </div>
+    <!-- Background Glow (Ambient Light) -->
+    <div class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-blue-500/10 rounded-full blur-[120px]"></div>
     </div>
 
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <!-- Hero Section -->
+        <header class="mb-16 reveal">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500 glow-pulse"></span>
+                </div>
+                <span class="text-sm font-medium text-indigo-400 tracking-wider uppercase">Systems Operational</span>
+                <span class="text-sm text-gray-500 px-3 py-1 bg-white/5 rounded-full border border-white/10" id="uptime-display">Uptime: 99.9%</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500">
+                DevOps <span class="text-indigo-500">Nexus</span>
+            </h1>
+            <p class="text-lg text-gray-400 max-w-2xl leading-relaxed">
+                Инженер облачной инфраструктуры, превращающий хаос в автоматизированные пайплайны. Специализируюсь на High-Availability системах и IaC.
+            </p>
+        </header>
+
+        <!-- Bento Grid -->
+        <div class="grid grid-cols-12 gap-4 md:gap-6">
+            
+            <!-- Stack Card (Big) -->
+            <div class="col-span-12 md:col-span-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 hover-border-beam transition-all duration-500 reveal">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-start mb-8">
+                        <h3 class="text-2xl font-semibold">Tech Stack</h3>
+                        <i data-lucide="layers" class="text-indigo-500 floating"></i>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-auto">
+                        <div class="flex items-center space-x-2 p-3 bg-white/5 rounded-2xl border border-white/5 hover:border-indigo-500/50 transition-colors">
+                            <i data-lucide="container" class="w-5 h-5 text-indigo-400"></i>
+                            <span class="text-sm font-medium">Docker</span>
+                        </div>
+                        <div class="flex items-center space-x-2 p-3 bg-white/5 rounded-2xl border border-white/5 hover:border-indigo-500/50 transition-colors">
+                            <i data-lucide="cloud" class="w-5 h-5 text-indigo-400"></i>
+                            <span class="text-sm font-medium">Kubernetes</span>
+                        </div>
+                        <div class="flex items-center space-x-2 p-3 bg-white/5 rounded-2xl border border-white/5 hover:border-indigo-500/50 transition-colors">
+                            <i data-lucide="terminal" class="w-5 h-5 text-indigo-400"></i>
+                            <span class="text-sm font-medium">Terraform</span>
+                        </div>
+                        <div class="flex items-center space-x-2 p-3 bg-white/5 rounded-2xl border border-white/5 hover:border-indigo-500/50 transition-colors">
+                            <i data-lucide="git-branch" class="w-5 h-5 text-indigo-400"></i>
+                            <span class="text-sm font-medium">GitLab CI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experience Card (Small) -->
+            <div class="col-span-12 md:col-span-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 reveal">
+                <div class="flex flex-col h-full">
+                    <h3 class="text-2xl font-semibold mb-4 text-white">Experience</h3>
+                    <div class="space-y-6">
+                        <div class="border-l-2 border-indigo-500/30 pl-4">
+                            <p class="text-sm text-indigo-400 font-bold uppercase">2022 - Present</p>
+                            <h4 class="font-medium text-white">Senior DevOps Eng.</h4>
+                        </div>
+                        <div class="border-l-2 border-white/10 pl-4">
+                            <p class="text-sm text-gray-500 font-bold uppercase">2020 - 2022</p>
+                            <h4 class="font-medium text-gray-300">Cloud Architect</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Activity (Wide) -->
+            <div class="col-span-12 md:col-span-5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 reveal">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-semibold">GitHub Activity</h3>
+                    <i data-lucide="github" class="w-5 h-5 text-gray-400"></i>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <div class="h-24 w-full bg-white/5 rounded-xl flex items-center justify-center border border-dashed border-white/10 overflow-hidden">
+                         <img src="https://images.unsplash.com" alt="Activity graph placeholder" class="opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                    <div class="flex justify-between mt-2">
+                        <span class="text-xs text-gray-500">2,431 contributions this year</span>
+                        <span class="text-xs text-indigo-400">View profile →</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IaC Visualization (Large) -->
+            <div class="col-span-12 md:col-span-7 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 relative overflow-hidden reveal">
+                <div class="relative z-10">
+                    <h3 class="text-2xl font-semibold mb-2">Infrastructure-as-Code</h3>
+                    <p class="text-gray-400 text-sm mb-6">Визуализация масштабируемой топологии AWS/GCP.</p>
+                    <div class="flex space-x-4">
+                        <button class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 rounded-xl text-sm font-medium transition-colors">Deploy Cluster</button>
+                        <button class="px-4 py-2 bg-white/5 border border-white/10 hover:bg-white/10 rounded-xl text-sm font-medium transition-colors">Destroy Environment</button>
+                    </div>
+                </div>
+                <!-- Decorative element -->
+                <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl"></div>
+            </div>
+
+            <!-- Certifications -->
+            <div class="col-span-12 md:col-span-12 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 reveal">
+                <div class="flex flex-wrap items-center justify-around gap-8 opacity-60 grayscale hover:grayscale-0 transition-all">
+                    <span class="text-xl font-bold tracking-widest uppercase">AWS Solutions Arch</span>
+                    <span class="text-xl font-bold tracking-widest uppercase">CKA Certified</span>
+                    <span class="text-xl font-bold tracking-widest uppercase">HashiCorp Partner</span>
+                    <span class="text-xl font-bold tracking-widest uppercase">Azure Expert</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-24 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p class="text-gray-500 text-sm">© 2024 DevOps-Nexus Portfolio. Built with Tailwind & Precision.</p>
+            <div class="flex space-x-6">
+                <a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                <a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                <a href="#" class="text-gray-400 hover:text-indigo-400 transition-colors"><i data-lucide="mail" class="w-5 h-5"></i></a>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com"></script>
+    <script src="https://unpkg.com"></script>
     <script src="script.js"></script>
 </body>
 </html>
