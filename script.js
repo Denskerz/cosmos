@@ -1,125 +1,117 @@
-/* 
-  Project: DevOps-Nexus-Bento-Portfolio
-  Theme: Deep Night & Indigo Accents
-  Role: Global Styles & Custom Animations
-*/
+/**
+ * Project: DevOps-Nexus-Bento-Portfolio
+ * File: script.js
+ * Description: Core logic for Lucide icons, ScrollReveal animations, 
+ * dynamic uptime simulation, and project filtering.
+ */
 
-@layer base {
-  :root {
-    /* Цветовая палитра Deep Night */
-    --color-bg: #050505;
-    --color-card-bg: rgba(255, 255, 255, 0.03);
-    --color-card-border: rgba(255, 255, 255, 0.08);
-    --color-indigo-primary: #6366f1; /* Indigo-500 */
-    --color-indigo-glow: rgba(99, 102, 241, 0.4);
-    
-    /* Шрифты */
-    --font-inter: 'Inter', sans-serif;
-  }
+document.addEventListener('DOMContentLoaded', () => {
+    initLucideIcons();
+    initScrollAnimations();
+    initUptimeSimulator();
+    initProjectFiltering();
+});
 
-  body {
-    background-color: var(--color-bg);
-    color: #ffffff;
-    font-family: var(--font-inter);
-    overflow-x: hidden;
-  }
-}
-
-@layer components {
-  /* Эффект Glassmorphism для Bento-карточек */
-  .bento-card {
-    @apply relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition-all duration-500;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .bento-card:hover {
-    @apply border-white/20 bg-white/10;
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
-  }
-}
-
-@layer utilities {
-  /* --- Keyframes --- */
-
-  /* Анимация пульсации для статуса пайплайнов */
-  @keyframes glow-pulse {
-    0% {
-      box-shadow: 0 0 0 0 var(--color-indigo-glow);
-      transform: scale(1);
+/**
+ * Инициализация иконок Lucide
+ * Заменяет элементы с атрибутом data-lucide на SVG
+ */
+const initLucideIcons = () => {
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    } else {
+        console.error('Lucide library not found');
     }
-    70% {
-      box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
-      transform: scale(1.05);
+};
+
+/**
+ * Каскадное появление карточек с помощью ScrollReveal
+ */
+const initScrollAnimations = () => {
+    if (typeof ScrollReveal !== 'undefined') {
+        const sr = ScrollReveal({
+            origin: 'bottom',
+            distance: '20px',
+            duration: 800,
+            delay: 200,
+            easing: 'cubic-bezier(0.5, 0, 0, 1)',
+            interval: 100,
+            reset: false
+        });
+
+        // Сначала анимируем заголовок, затем карточки Bento-сетки
+        sr.reveal('.hero-content');
+        sr.reveal('.bento-grid > div', { interval: 150 });
     }
-    100% {
-      box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
-      transform: scale(1);
-    }
-  }
+};
 
-  /* "Бегущий луч" по границе (Border Beam) */
-  @keyframes border-beam {
-    0% { offset-distance: 0%; }
-    100% { offset-distance: 100%; }
-  }
+/**
+ * Имитация динамического 'Uptime' систем
+ * Генерирует реалистичные колебания процентов для DevOps-визуализации
+ */
+const initUptimeSimulator = () => {
+    const uptimeElement = document.querySelector('[data-uptime-value]');
+    if (!uptimeElement) return;
 
-  /* Плавное парение иконок Lucide */
-  @keyframes floating {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
+    const updateUptime = () => {
+        // Имитируем стабильность системы 99.9x%
+        const baseUptime = 99.9;
+        const fluctuation = (Math.random() * 0.09).toFixed(2);
+        const finalValue = (baseUptime + parseFloat(fluctuation)).toFixed(2);
+        
+        uptimeElement.textContent = `${finalValue}%`;
+    };
 
-  /* --- Применение анимаций --- */
+    // Обновляем раз в 5 секунд для эффекта "живого" мониторинга
+    setInterval(updateUptime, 5000);
+};
 
-  .animate-glow {
-    animation: glow-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
+/**
+ * Фильтрация проектов по тегам (Docker, K8s, Terraform)
+ */
+const initProjectFiltering = () => {
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const projectCards = document.querySelectorAll('[data-category]');
 
-  .animate-floating {
-    animation: floating 3s ease-in-out infinite;
-  }
+    if (filterButtons.length === 0) return;
 
-  /* Логика Border Beam (требует наличия SVG или псевдоэлемента в HTML) */
-  .border-beam-container::after {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    padding: 1px;
-    background: conic-gradient(
-      from 0deg at 50% 50%,
-      transparent 0deg,
-      var(--color-indigo-primary) 60deg,
-      transparent 120deg
-    );
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const filterValue = button.getAttribute('data-filter');
 
-  .bento-card:hover.border-beam-container::after {
-    opacity: 1;
-    animation: border-beam 4s linear infinite;
-  }
-}
+            // Смена активного состояния кнопок
+            filterButtons.forEach(btn => btn.classList.remove('bg-indigo-500', 'text-white'));
+            button.classList.add('bg-indigo-500', 'text-white');
 
-/* Кастомизация скроллбара для соответствия палитре */
-::-webkit-scrollbar {
-  width: 6px;
-}
+            // Логика фильтрации
+            projectCards.forEach(card => {
+                const categories = card.getAttribute('data-category').split(' ');
+                
+                if (filterValue === 'all' || categories.includes(filterValue)) {
+                    card.style.display = 'block';
+                    // Добавляем микро-анимацию появления
+                    card.classList.add('animate-fade-in');
+                } else {
+                    card.style.display = 'none';
+                    card.classList.remove('animate-fade-in');
+                }
+            });
+        });
+    });
+};
 
-::-webkit-scrollbar-track {
-  background: var(--color-bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-indigo-primary);
-}
+/**
+ * Плавный скролл для якорных ссылок
+ */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
